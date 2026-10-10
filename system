@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SF Evently - Event Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f5fb;
+            margin: 0;
+            color: #172554;
+        }
+
+        header {
+            background-color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            color: #5045ed;
+        }
+
+        nav {
+            background-color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav button {
+            background-color: #5045ed;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 3px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 20px auto;
+        }
+
+        .page {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 1px solid #e1e3ed;
+        }
+
+        h2 {
+            color: #172554;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 80px;
+        }
+
+        .main-button {
+            background-color: #5045ed;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .full-button {
+            width: 100%;
+        }
+
+        .delete-button {
+            background-color: #e74c65;
+            color: white;
+            border: none;
+            padding: 7px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background-color: #efedff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .stat-box h2 {
+            color: #5045ed;
+        }
+
+        .event-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff;
+            border: 1px solid #e1e3ed;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .event-date {
+            background-color: #5045ed;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            min-width: 35px;
+        }
+
+        .event-info {
+            flex: 1;
+        }
+
+        .event-info p {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .status {
+            color: #16834d;
+            background-color: #d9f7e8;
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 9px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #5045ed;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message {
+            font-weight: bold;
+            color: #16834d;
+        }
+
+        .success {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .success-icon {
+            background-color: #299e68;
+            color: white;
+            font-size: 50px;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+            margin: auto;
+        }
+
+        @media screen and (max-width: 600px) {
+            .stats {
+                flex-direction: column;
+            }
+
+            .event-card {
+                flex-wrap: wrap;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .container {
+                width: 94%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎉 SF Evently</h1>
+    <p>PLAN • CONNECT • MAKE IT HAPPEN</p>
+</header>
+
+<nav>
+    <button onclick="showPage('dashboard')">Home</button>
+    <button onclick="showPage('events')">Events</button>
+    <button onclick="showPage('create')">Create Event</button>
+    <button onclick="showPage('participants')">Participants</button>
+    <button onclick="showPage('register')">Register</button>
+</nav>
+
+<div class="container">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="page">
+
+        <h2>Good morning, SFYO!</h2>
+        <p>Welcome back! Here's what's happening.</p>
+
+        <h3>Overview</h3>
+
+        <div class="stats">
+            <div class="stat-box">
+                <p>Upcoming Events</p>
+                <h2 id="eventCount">0</h2>
+            </div>
+
+            <div class="stat-box">
+                <p>Participants</p>
+                <h2 id="participantCount">0</h2>
+            </div>
+
+            <div class="stat-box">
+                <p>Venues</p>
+                <h2 id="venueCount">0</h2>
+            </div>
+        </div>
+
+        <h3>Quick Actions</h3>
+
+        <button class="main-button full-button"
+                onclick="showPage('create')">
+            + Create Event
+        </button>
+
+        <button class="main-button full-button"
+                onclick="showPage('participants')">
+            View Participants
+        </button>
+
+        <h3>Upcoming Events</h3>
+
+        <div id="dashboardEvents"></div>
+
+    </div>
+
+    <!-- CREATE EVENT -->
+    <div id="create" class="page hidden">
+
+        <h2>Create Event</h2>
+        <p>Set up the event details below.</p>
+
+        <form id="eventForm">
+
+            <label>Event Name:</label>
+            <input type="text" id="name"
+                   placeholder="Christmas Workshop" required>
+
+            <label>Event Date:</label>
+            <input type="date" id="date" required>
+
+            <label>Event Time:</label>
+            <input type="time" id="time" required>
+
+            <label>Venue:</label>
+            <input type="text" id="venue"
+                   placeholder="Community Hall" required>
+
+            <label>Capacity:</label>
+            <input type="number" id="capacity"
+                   placeholder="150 participants" min="1" required>
+
+            <label>Event Category:</label>
+            <select id="category">
+                <option>Workshop</option>
+                <option>Party</option>
+                <option>Meeting</option>
+                <option>Seminar</option>
+                <option>Sports</option>
+            </select>
+
+            <label>Description:</label>
+            <textarea id="description"
+                      placeholder="Event description"></textarea>
+
+            <button type="submit" class="main-button full-button">
+                Create Event
+            </button>
+
+        </form>
+
+        <p id="output" class="message"></p>
+
+    </div>
+
+    <!-- EVENT LIST -->
+    <div id="events" class="page hidden">
+
+        <h2>Manage Events</h2>
+        <p>Create and maintain SFYO activities.</p>
+
+        <label>Search Events:</label>
+        <input type="text" id="searchEvent"
+               placeholder="Search event name"
+               oninput="displayEvents()">
+
+        <div id="eventsTable"></div>
+
+    </div>
+
+    <!-- REGISTER PARTICIPANT -->
+    <div id="register" class="page hidden">
+
+        <h2>Register Participant</h2>
+
+        <form id="participantForm">
+
+            <label>Participant Name:</label>
+            <input type="text" id="participantName"
+                   placeholder="Full Name" required>
+
+            <label>Email Address:</label>
+            <input type="email" id="email"
+                   placeholder="Email Address" required>
+
+            <label>Select Event:</label>
+            <select id="selectedEvent" required></select>
+
+            <button type="submit" class="main-button full-button">
+                Register
+            </button>
+
+        </form>
+
+        <p id="registrationOutput" class="message"></p>
+
+    </div>
+
+    <!-- PARTICIPANTS LIST -->
+    <div id="participants" class="page hidden">
+
+        <h2>Participants</h2>
+        <p>View and manage registered members.</p>
+
+        <label>Search Participants:</label>
+        <input type="text" id="searchParticipant"
+               placeholder="Search participant"
+               oninput="displayParticipants()">
+
+        <div id="participantsTable"></div>
+
+    </div>
+
+    <!-- SUCCESS PAGE -->
+    <div id="success" class="page hidden">
+
+        <div class="success">
+            <div class="success-icon">✓</div>
+            <h2 id="successTitle">Successful!</h2>
+            <p id="successMessage">Your information has been saved.</p>
+
+            <button class="main-button"
+                    onclick="showPage('dashboard')">
+                Back to Home
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // LOAD SAVED DATA
+
+    var savedEvents = localStorage.getItem("events");
+
+    if (savedEvents == null) {
+        var events = [];
+    } else {
+        var events = JSON.parse(savedEvents);
+    }
+
+    var savedParticipants = localStorage.getItem("participants");
+
+    if (savedParticipants == null) {
+        var participants = [];
+    } else {
+        var participants = JSON.parse(savedParticipants);
+    }
+
+    // CHANGE PAGE
+
+    function showPage(page) {
+
+        var pages = [
+            "dashboard",
+            "create",
+            "events",
+            "register",
+            "participants",
+            "success"
+        ];
+
+        for (var i = 0; i < pages.length; i++) {
+            document.getElementById(pages[i]).classList.add("hidden");
+        }
+
+        document.getElementById(page).classList.remove("hidden");
+
+        displayEvents();
+        displayParticipants();
+        updateEventOptions();
+        updateDashboard();
+    }
+
+    // CREATE EVENT
+
+    document.getElementById("eventForm").onsubmit = function(e) {
+
+        e.preventDefault();
+
+        var name = document.getElementById("name").value;
+        var date = document.getElementById("date").value;
+        var time = document.getElementById("time").value;
+        var venue = document.getElementById("venue").value;
+        var capacity = Number(document.getElementById("capacity").value);
+        var category = document.getElementById("category").value;
+        var description = document.getElementById("description").value;
+
+        if (name == "" || date == "" || time == "" ||
+            venue == "" || capacity < 1) {
+
+            document.getElementById("output").innerHTML =
+                "Please complete all required fields.";
+
+            return;
+        }
+
+        events.push({
+            id: new Date().getTime(),
+            name: name,
+            date: date,
+            time: time,
+            venue: venue,
+            capacity: capacity,
+            category: category,
+            description: description
+        });
+
+        localStorage.setItem("events", JSON.stringify(events));
+
+        document.getElementById("eventForm").reset();
+
+        document.getElementById("successTitle").innerHTML =
+            "Event Created Successfully!";
+
+        document.getElementById("successMessage").innerHTML =
+            name + " has been added to your event list.";
+
+        showPage("success");
+
+    };
+
+    // DISPLAY EVENTS
+
+    function displayEvents() {
+
+        var table = "";
+        var search = document.getElementById("searchEvent").value.toLowerCase();
+
+        table += "<table>";
+        table += "<tr><th>Event</th><th>Date</th><th>Venue</th><th>Capacity</th><th>Action</th></tr>";
+
+        var dashboard = "";
+
+        for (var i = 0; i < events.length; i++) {
+
+            if (events[i].name.toLowerCase().includes(search)) {
+
+                var eventDate = new Date(events[i].date + "T12:00:00");
+                var day = eventDate.getDate();
+                var month = eventDate.toLocaleString("en-US", {
+                    month: "short"
+                });
+
+                table += "<tr>";
+                table += "<td>" + events[i].name + "<br>" + events[i].category + "</td>";
+                table += "<td>" + events[i].date + "<br>" + events[i].time + "</td>";
+                table += "<td>" + events[i].venue + "</td>";
+                table += "<td>" + events[i].capacity + "</td>";
+                table += "<td><button class='delete-button' onclick='deleteEvent(" + i + ")'>Delete</button></td>";
+                table += "</tr>";
+
+            }
+
+            dashboard += "<div class='event-card'>";
+            dashboard += "<div class='event-date'><h3>" + day + "</h3><small>" + month + "</small></div>";
+            dashboard += "<div class='event-info'>";
+            dashboard += "<h4>" + events[i].name + "</h4>";
+            dashboard += "<p>" + events[i].category + "</p>";
+            dashboard += "<p>📍 " + events[i].venue + "</p>";
+            dashboard += "<p>🕒 " + events[i].time + "</p>";
+            dashboard += "</div>";
+            dashboard += "<span class='status'>Open</span>";
+            dashboard += "</div>";
+        }
+
+        table += "</table>";
+
+        if (events.length == 0) {
+            table = "<p>No events available. Create your first event!</p>";
+            dashboard = "<p>No upcoming events yet.</p>";
+        }
+
+        document.getElementById("eventsTable").innerHTML = table;
+        document.getElementById("dashboardEvents").innerHTML = dashboard;
+    }
+
+    // DELETE EVENT
+
+    function deleteEvent(index) {
+
+        for (var i = 0; i < participants.length; i++) {
+
+            if (participants[i].eventId == events[index].id) {
+                alert("Remove participants registered for this event first.");
+                return;
+            }
+        }
+
+        if (confirm("Are you sure you want to delete this event?")) {
+
+            events.splice(index, 1);
+
+            localStorage.setItem("events", JSON.stringify(events));
+
+            displayEvents();
+            updateDashboard();
+            updateEventOptions();
+        }
+    }
+
+    // UPDATE EVENT OPTIONS
+
+    function updateEventOptions() {
+
+        var options = "<option value=''>Select an event</option>";
+
+        for (var i = 0; i < events.length; i++) {
+
+            options += "<option value='" + events[i].id + "'>" +
+                events[i].name + "</option>";
+        }
+
+        document.getElementById("selectedEvent").innerHTML = options;
+    }
+
+    // REGISTER PARTICIPANT
+
+    document.getElementById("participantForm").onsubmit = function(e) {
+
+        e.preventDefault();
+
+        var name = document.getElementById("participantName").value;
+        var email = document.getElementById("email").value;
+        var selected = document.getElementById("selectedEvent").value;
+
+        var eventIndex = -1;
+
+        for (var i = 0; i < events.length; i++) {
+
+            if (events[i].id == selected) {
+                eventIndex = i;
+            }
+        }
+
+        if (eventIndex == -1) {
+
+            document.getElementById("registrationOutput").innerHTML =
+                "Please select an event.";
+
+            return;
+        }
+
+        var eventName = events[eventIndex].name;
+        var count = 0;
+
+        for (var i = 0; i < participants.length; i++) {
+
+            if (participants[i].eventId == selected) {
+                count++;
+            }
+
+            if (participants[i].eventId == selected &&
+                participants[i].email.toLowerCase() == email.toLowerCase()) {
+
+                document.getElementById("registrationOutput").innerHTML =
+                    "This email is already registered.";
+
+                return;
+            }
+        }
+
+        if (count >= events[eventIndex].capacity) {
+
+            document.getElementById("registrationOutput").innerHTML =
+                "This event has reached its capacity.";
+
+            return;
+        }
+
+        participants.push({
+            name: name,
+            email: email,
+            eventId: selected,
+            event: eventName
+        });
+
+        localStorage.setItem("participants", JSON.stringify(participants));
+
+        document.getElementById("participantForm").reset();
+
+        document.getElementById("successTitle").innerHTML =
+            "Registration Successful!";
+
+        document.getElementById("successMessage").innerHTML =
+            name + " is now registered for " + eventName + ".";
+
+        showPage("success");
+
+    };
+
+    // DISPLAY PARTICIPANTS
+
+    function displayParticipants() {
+
+        var table = "";
+        var search = document.getElementById("searchParticipant").value.toLowerCase();
+
+        table += "<table>";
+        table += "<tr><th>Name</th><th>Email</th><th>Event</th><th>Action</th></tr>";
+
+        for (var i = 0; i < participants.length; i++) {
+
+            if (participants[i].name.toLowerCase().includes(search) ||
+                participants[i].email.toLowerCase().includes(search)) {
+
+                table += "<tr>";
+                table += "<td>" + participants[i].name + "</td>";
+                table += "<td>" + participants[i].email + "</td>";
+                table += "<td>" + participants[i].event + "</td>";
+                table += "<td><button class='delete-button' onclick='deleteParticipant(" + i + ")'>Delete</button></td>";
+                table += "</tr>";
+            }
+        }
+
+        table += "</table>";
+
+        if (participants.length == 0) {
+            table = "<p>No participants registered yet.</p>";
+        }
+
+        document.getElementById("participantsTable").innerHTML = table;
+    }
+
+    // DELETE PARTICIPANT
+
+    function deleteParticipant(index) {
+
+        if (confirm("Delete this participant?")) {
+
+            participants.splice(index, 1);
+
+            localStorage.setItem("participants", JSON.stringify(participants));
+
+            displayParticipants();
+            updateDashboard();
+        }
+    }
+
+    // UPDATE DASHBOARD
+
+    function updateDashboard() {
+
+        document.getElementById("eventCount").innerHTML = events.length;
+
+        document.getElementById("participantCount").innerHTML =
+            participants.length;
+
+        var venues = [];
+
+        for (var i = 0; i < events.length; i++) {
+
+            if (!venues.includes(events[i].venue.toLowerCase())) {
+                venues.push(events[i].venue.toLowerCase());
+            }
+        }
+
+        document.getElementById("venueCount").innerHTML = venues.length;
+    }
+
+    // SHOW SAVED DATA
+
+    displayEvents();
+    displayParticipants();
+    updateEventOptions();
+    updateDashboard();
+
+</script>
+
+</body>
+</html>
